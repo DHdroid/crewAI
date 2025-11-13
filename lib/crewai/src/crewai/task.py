@@ -613,10 +613,10 @@ class Task(BaseModel):
 
         tasks_slices = [description]
 
-        output = self.i18n.slice("expected_output").format(
-            expected_output=self.expected_output
-        )
-        tasks_slices = [description, output]
+        # output = self.i18n.slice("expected_output").format(
+        #     expected_output=self.expected_output
+        # )
+        # tasks_slices = [description, output]
 
         if self.markdown:
             markdown_instruction = """Your final answer MUST be formatted in Markdown syntax.

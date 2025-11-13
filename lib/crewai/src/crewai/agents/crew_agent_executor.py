@@ -159,18 +159,18 @@ class CrewAgentExecutor(CrewAgentExecutorMixin):
         Returns:
             Dictionary with agent output.
         """
-        if "system" in self.prompt:
-            system_prompt = self._format_prompt(
-                cast(str, self.prompt.get("system", "")), inputs
-            )
-            user_prompt = self._format_prompt(
-                cast(str, self.prompt.get("user", "")), inputs
-            )
-            self.messages.append(format_message_for_llm(system_prompt, role="system"))
-            self.messages.append(format_message_for_llm(user_prompt))
-        else:
-            user_prompt = self._format_prompt(self.prompt.get("prompt", ""), inputs)
-            self.messages.append(format_message_for_llm(user_prompt))
+        # if "system" in self.prompt:
+        #     system_prompt = self._format_prompt(
+        #         cast(str, self.prompt.get("system", "")), inputs
+        #     )
+        #     user_prompt = self._format_prompt(
+        #         cast(str, self.prompt.get("user", "")), inputs
+        #     )
+        #     self.messages.append(format_message_for_llm(system_prompt, role="system"))
+        #     self.messages.append(format_message_for_llm(user_prompt))
+        # else:
+        user_prompt = self._format_prompt(self.prompt.get("prompt", ""), inputs)
+        self.messages.append(format_message_for_llm(user_prompt))
 
         self._show_start_logs()
 
@@ -450,9 +450,10 @@ class CrewAgentExecutor(CrewAgentExecutorMixin):
         Returns:
             Formatted prompt.
         """
-        prompt = prompt.replace("{input}", inputs["input"])
-        prompt = prompt.replace("{tool_names}", inputs["tool_names"])
-        return prompt.replace("{tools}", inputs["tools"])
+        return inputs["input"]
+        # prompt = prompt.replace("{input}", inputs["input"])
+        # prompt = prompt.replace("{tool_names}", inputs["tool_names"])
+        # return prompt.replace("{tools}", inputs["tools"])
 
     def _handle_human_feedback(self, formatted_answer: AgentFinish) -> AgentFinish:
         """Process human feedback.
