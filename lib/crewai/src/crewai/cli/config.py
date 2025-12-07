@@ -2,6 +2,7 @@ import json
 from logging import getLogger
 from pathlib import Path
 import tempfile
+from typing import Any
 
 from pydantic import BaseModel, Field
 
@@ -72,6 +73,7 @@ CLI_SETTINGS_KEYS = [
     "oauth2_audience",
     "oauth2_client_id",
     "oauth2_domain",
+    "oauth2_extra",
 ]
 
 # Default values for CLI settings
@@ -81,6 +83,7 @@ DEFAULT_CLI_SETTINGS = {
     "oauth2_audience": CREWAI_ENTERPRISE_DEFAULT_OAUTH2_AUDIENCE,
     "oauth2_client_id": CREWAI_ENTERPRISE_DEFAULT_OAUTH2_CLIENT_ID,
     "oauth2_domain": CREWAI_ENTERPRISE_DEFAULT_OAUTH2_DOMAIN,
+    "oauth2_extra": {},
 }
 
 # Readonly settings - cannot be set by the user
@@ -100,7 +103,7 @@ HIDDEN_SETTINGS_KEYS = [
 class Settings(BaseModel):
     enterprise_base_url: str | None = Field(
         default=DEFAULT_CLI_SETTINGS["enterprise_base_url"],
-        description="Base URL of the CrewAI AMP instance",
+        description="Base URL of the CrewAI AOP instance",
     )
     tool_repository_username: str | None = Field(
         None, description="Username for interacting with the Tool Repository"
@@ -136,7 +139,12 @@ class Settings(BaseModel):
         default=DEFAULT_CLI_SETTINGS["oauth2_domain"],
     )
 
-    def __init__(self, config_path: Path | None = None, **data):
+    oauth2_extra: dict[str, Any] = Field(
+        description="Extra configuration for the OAuth2 provider.",
+        default={},
+    )
+
+    def __init__(self, config_path: Path | None = None, **data: dict[str, Any]) -> None:
         """Load Settings from config path with fallback support"""
         if config_path is None:
             config_path = get_writable_config_path()
